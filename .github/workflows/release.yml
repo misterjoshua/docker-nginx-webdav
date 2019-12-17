@@ -20,6 +20,10 @@ jobs:
         docker build . --file Dockerfile --tag $DOCKER_IMAGE
         docker-compose -f docker-compose.test.yml up --build --exit-code-from tester
 
-        docker login --username $GITHUB_ACTOR --password $GITHUB_TOKEN $DOCKER_SERVER
+        echo "$GITHUB_TOKEN" | docker login --username "$GITHUB_ACTOR" --password-stdin $DOCKER_SERVER
+
+        echo "Sourcing dockerPushSemver"
         source <(curl -s https://raw.githubusercontent.com/misterjoshua/docker-push-semver-bash/master/docker_push_semver.sh)
+
+        echo "Running dockerPushSemver with $DOCKER_REPO and $VERSION"
         dockerPushSemver $DOCKER_REPO $VERSION
