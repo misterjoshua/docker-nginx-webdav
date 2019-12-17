@@ -1,4 +1,4 @@
-name: CI
+name: Release
 
 on:
   push:
@@ -20,7 +20,7 @@ jobs:
         echo ::set-output name=DOCKER_SERVER::$DOCKER_SERVER
         echo ::set-output name=DOCKER_IMAGE::$DOCKER_IMAGE
         echo ::set-output name=VERSION::$VERSION
-    - name: Build and test the docker image
+    - name: Build, test, and release the docker image
       run: |
         export DOCKER_IMAGE=docker-php-webdav ${{ steps.variables.outputs.DOCKER_IMAGE }}
         docker build . --file Dockerfile --tag $DOCKER_IMAGE
