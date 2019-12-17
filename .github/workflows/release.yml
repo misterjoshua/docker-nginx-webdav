@@ -11,19 +11,24 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Build, test, and release the docker image
+      env:
+        DOCKER_REPOSITORY: ${{ secrets.DOCKER_REPOSITORY }}
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run: |
+        DOCKER_REPOSITORY=${DOCKER_REPOSITORY:-wheatstalk/docker-php-webdav}
         DOCKER_SERVER=${DOCKER_SERVER:-}
-        DOCKER_REPO=${DOCKER_REPO:-wheatstalk/docker-php-webdav}
         VERSION=${GITHUB_REF#refs/tags/v}
-        export DOCKER_IMAGE=$DOCKER_REPO:latest
+        
+        export DOCKER_IMAGE=$DOCKER_REPOSITORY:latest
 
         docker build . --file Dockerfile --tag $DOCKER_IMAGE
         docker-compose -f docker-compose.test.yml up --build --exit-code-from tester
 
-        echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin $DOCKER_SERVER
+        docker login --username "$DOCKER_USERNAME" --password "$DOCKER_PASSWORD" $DOCKER_SERVER
 
         echo "Sourcing dockerPushSemver"
         source <(curl -s https://raw.githubusercontent.com/misterjoshua/docker-push-semver-bash/master/docker_push_semver.sh)
 
-        echo "Running dockerPushSemver with $DOCKER_REPO and $VERSION"
-        dockerPushSemver $DOCKER_REPO $VERSION
+        echo "Running dockerPushSemver with $DOCKER_REPOSITORY and $VERSION"
+        dockerPushSemver $DOCKER_REPOSITORY $VERSION
