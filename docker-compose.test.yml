@@ -2,7 +2,7 @@ version: "3"
 
 services:
   sut:
-    build: .
+    image: ${DOCKER_IMAGE}
     networks: [sut]
     container_name: sut
     environment:

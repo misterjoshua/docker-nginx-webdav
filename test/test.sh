@@ -52,9 +52,9 @@ done
 log "SUT should give us identical files to what we PUT"
 md5sum -c $MD5SUM_FILE
 
-log "SUT should have more files in it than we put up."
+log "SUT should have at least as many files in it than we put up."
 NUM_FILES=$(ls -1 *.* | wc -l)
 NUM_FILES_IN_SUT=$(curl $CURL_OPT -X PROPFIND $SUT | xpath "//d:href" | wc -l)
-(( NUM_FILES_IN_SUT > NUM_FILES )) || die "SUT has less files than we put up. Expected: $NUM_FILES_IN_SUT > $NUM_FILES"
+(( NUM_FILES_IN_SUT >= NUM_FILES )) || die "SUT has less files than we put up. Expected: $NUM_FILES_IN_SUT >= $NUM_FILES"
 
 log "All tests passed without failing."
