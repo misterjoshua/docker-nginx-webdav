@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Variables
+      id: variables
+      run: |
+        DOCKER_SERVER=${DOCKER_SERVER:-docker.pkg.github.com}
+        DOCKER_REPO=${DOCKER_REPO:-docker.pkg.github.com/$GITHUB_REPOSITORY/docker-php-webdav}
+        VERSION=${GITHUB_REF#refs/tags/v}
+        DOCKER_IMAGE=$DOCKER_REPO:$VERSION
+        echo ::set-output name=DOCKER_SERVER::$DOCKER_SERVER
+        echo ::set-output name=DOCKER_IMAGE::$DOCKER_IMAGE
+        echo ::set-output name=VERSION::$VERSION
+    - name: Build and test the docker image
+      run: |
+        docker build . --file Dockerfile --tag ${{ steps.variables.outputs.DOCKER_IMAGE }}
+        exit 1
