@@ -22,7 +22,7 @@ jobs:
         echo ::set-output name=VERSION::$VERSION
     - name: Build, test, and release the docker image
       run: |
-        export DOCKER_IMAGE=docker-php-webdav ${{ steps.variables.outputs.DOCKER_IMAGE }}
+        export DOCKER_IMAGE=${{ steps.variables.outputs.DOCKER_IMAGE }}
         docker build . --file Dockerfile --tag $DOCKER_IMAGE
         docker-compose -f docker-compose.test.yml up --build --exit-code-from tester
 
