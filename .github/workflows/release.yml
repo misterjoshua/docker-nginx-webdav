@@ -16,11 +16,16 @@ jobs:
         DOCKER_SERVER=${DOCKER_SERVER:-docker.pkg.github.com}
         DOCKER_REPO=${DOCKER_REPO:-docker.pkg.github.com/$GITHUB_REPOSITORY/docker-php-webdav}
         VERSION=${GITHUB_REF#refs/tags/v}
-        DOCKER_IMAGE=$DOCKER_REPO:$VERSION
+        DOCKER_IMAGE=$DOCKER_REPO:latest
         echo ::set-output name=DOCKER_SERVER::$DOCKER_SERVER
         echo ::set-output name=DOCKER_IMAGE::$DOCKER_IMAGE
         echo ::set-output name=VERSION::$VERSION
     - name: Build and test the docker image
       run: |
-        docker build . --file Dockerfile --tag ${{ steps.variables.outputs.DOCKER_IMAGE }}
-        exit 1
+        export DOCKER_IMAGE=docker-php-webdav ${{ steps.variables.outputs.DOCKER_IMAGE }}
+        docker build . --file Dockerfile --tag $DOCKER_IMAGE
+        docker-compose -f docker-compose.test.yml up --build --exit-code-from tester
+
+        echo $GITHUB_TOKEN | docker login --username $GITHUB_ACTOR --password-stdin $DOCKER_SERVER
+        source <(curl -s https://raw.githubusercontent.com/misterjoshua/docker-push-semver-bash/master/docker_push_semver.sh)
+        dockerPushSemver $DOCKER_IMAGE $VERSION
