@@ -1,40 +1,35 @@
-FROM          debian:jessie
-MAINTAINER    oliver@xama.us
+ARG IMAGE=php:7-apache
+
+FROM composer:1 AS build
+
+WORKDIR /build
+ADD web/composer.json .
+ADD web/composer.lock .
+ADD web/server.php .
+RUN composer global require hirak/prestissimo && composer install
+
+# Build PHP
+FROM ${IMAGE}
+
+WORKDIR /var/webdav
+COPY --from=build /build/ /var/webdav
+
+COPY scripts/entrypoint.sh /entrypoint.sh
+COPY scripts/install.sh /install.sh
+COPY config/apache/vhost.conf /etc/apache2/sites-available/000-default.conf
+COPY config/php/webdav.ini /usr/local/etc/php/conf.d/
+
+RUN a2enmod rewrite
 
 # Default webdav user (CHANGE THIS!)
 ENV           WEBDAV_USERNAME admin
 ENV           WEBDAV_PASSWORD admin
+ENV           SKIP_PERMISSIONS_FIX no
 
-# Defaults
+# # Defaults
 WORKDIR       /var/webdav
 VOLUME        /var/webdav/public
 VOLUME        /var/webdav/data
 
-# Install nginx with php5 support
-RUN           apt-get update && \
-              DEBIAN_FRONTEND=noninteractive apt-get install -y nginx php5-fpm && \
-              rm -rf /var/lib/apt/lists/*
-
-# Install SabreDAV
-RUN           php -r "readfile('http://getcomposer.org/installer');" > composer-setup.php && \
-              php composer-setup.php --install-dir=/usr/bin --filename=composer && \
-              php -r "unlink('composer-setup.php');" && \
-              composer require sabre/dav ~3.1.3 && \
-              rm /usr/bin/composer
-
-# Set up entrypoint
-COPY          scripts/install.sh /install.sh
-
-# Configure nginx
-COPY          config/nginx/default /etc/nginx/sites-enabled/default
-COPY          config/nginx/fastcgi_params /etc/nginx/fastcgi_params
-
-# forward request and error logs to docker log collector
-RUN           ln -sf /dev/stdout /var/log/nginx/access.log && \
-              ln -sf /dev/stderr /var/log/nginx/error.log
-
-# copy server.php for client -- sabredav communication
-COPY          web/server.php /var/webdav/server.php
-
-CMD           /install.sh && service php5-fpm start && nginx -g "daemon off;"
-
+ENTRYPOINT [ "/entrypoint.sh" ]
+CMD [ "apache2-foreground" ]

@@ -5,8 +5,10 @@
 ##
 
 # Fix possible permission errors
-chown -R www-data:www-data /var/webdav
-chmod -R 777 /var/webdav
+if [ "$SKIP_PERMISSIONS_FIX" = "no" ]; then
+    chown -R www-data:www-data /var/webdav
+    chmod -R 777 /var/webdav
+fi
 
 # Create authentication file
 echo "$WEBDAV_USERNAME:SabreDAV:$(php -r "echo md5('$WEBDAV_USERNAME:SabreDAV:$WEBDAV_PASSWORD');")" >> .htdigest
