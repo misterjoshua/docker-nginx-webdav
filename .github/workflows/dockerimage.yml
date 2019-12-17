@@ -10,5 +10,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+    - name: Variables
+      id: variables
+      run: |
+        DOCKER_REPO=docker.pkg.github.com/misterjoshua/docker-php-webdav/php-php-webdav
+        DOCKER_IMAGE=$DOCKER_REPO:$(date +%s)
+        echo ::set-output name=DOCKER_IMAGE::$DOCKER_IMAGE
+    - name: Build and test the docker image
+      run: |
+        docker build . --file Dockerfile --tag ${{ steps.variables.outputs.DOCKER_IMAGE }}
