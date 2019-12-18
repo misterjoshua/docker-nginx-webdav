@@ -1,3 +1,5 @@
+![CI Status](https://img.shields.io/github/workflow/status/misterjoshua/docker-php-webdav/CI)
+
 # docker-php-webdav
 WebDAV (SabreDAV) Docker Image with authentication running on the official php images.
 
