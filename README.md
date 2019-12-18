@@ -15,9 +15,9 @@ Features:
 This image was originally forked from `xama5/docker-nginx-webdav`, but the following changes were made:
 * Changed to a multi-staged build to simplify building
 * Switched to building with the official php images
-* Added `composer.json` and `composer.lock` to the project so that the project gets GitHub auto-patching for security.
+* Added `composer.json` and `composer.lock` to the project so that the project gets GitHub auto-patching for security
 * Allows the user to skip the permission-fixing script by setting the `SKIP_PERMISSIONS_FIX` environment variable to something other than "no"
-* Introduced automated build testing via GitHub actions
+* Introduced automated build testing via GitHub actions and docker-compose
 
 ## Getting started
 
@@ -29,7 +29,7 @@ docker run -d \
            -e WEBDAV_PASSWORD=admin \
            -p 8080:80 \
            -v /path/to/your/files:/var/webdav/public \
-           wheatstalk/nginx-webdav
+           wheatstalk/docker-php-webdav
 ````
 
 This will start a new webdav instance on `http://localhost:8080` with the given username and password for authentication.
