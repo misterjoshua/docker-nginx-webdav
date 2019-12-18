@@ -1,4 +1,6 @@
 {
+    "name": "docker-php-webdav",
+    "description": "A PHP-based WebDav build with SabreDAV that works.",
     "require": {
         "sabre/dav": "^3"
     }
