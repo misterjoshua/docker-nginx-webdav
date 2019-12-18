@@ -12,5 +12,5 @@ jobs:
     - uses: actions/checkout@v1
     - name: Build and test the docker image
       run: |
-        DOCKER_IMAGE=docker-nginx-webdav:latest \
+        DOCKER_IMAGE=docker-php-webdav:latest \
         ./docker-build.sh
