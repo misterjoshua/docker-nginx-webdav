@@ -4,20 +4,67 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e35b3ecb8ac4a66a073dcbcf29370034",
+    "content-hash": "65665f3bffcc0dbfd06ec09d7c37c131",
     "packages": [
         {
-            "name": "sabre/dav",
-            "version": "3.1.5",
+            "name": "psr/log",
+            "version": "1.1.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/sabre-io/dav.git",
-                "reference": "b5dbb56170fd4f0d8b8b1191f22950f05d306532"
+                "url": "https://github.com/php-fig/log.git",
+                "reference": "446d54b4cb6bf489fc9d75f55843658e6f25d801"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sabre-io/dav/zipball/b5dbb56170fd4f0d8b8b1191f22950f05d306532",
-                "reference": "b5dbb56170fd4f0d8b8b1191f22950f05d306532",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/446d54b4cb6bf489fc9d75f55843658e6f25d801",
+                "reference": "446d54b4cb6bf489fc9d75f55843658e6f25d801",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Log\\": "Psr/Log/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for logging libraries",
+            "homepage": "https://github.com/php-fig/log",
+            "keywords": [
+                "log",
+                "psr",
+                "psr-3"
+            ],
+            "time": "2019-11-01T11:05:21+00:00"
+        },
+        {
+            "name": "sabre/dav",
+            "version": "3.2.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sabre-io/dav.git",
+                "reference": "a9780ce4f35560ecbd0af524ad32d9d2c8954b80"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sabre-io/dav/zipball/a9780ce4f35560ecbd0af524ad32d9d2c8954b80",
+                "reference": "a9780ce4f35560ecbd0af524ad32d9d2c8954b80",
                 "shasum": ""
             },
             "require": {
@@ -31,15 +78,18 @@
                 "ext-spl": "*",
                 "lib-libxml": ">=2.7.0",
                 "php": ">=5.5.0",
+                "psr/log": "^1.0",
                 "sabre/event": ">=2.0.0, <4.0.0",
                 "sabre/http": "^4.2.1",
-                "sabre/uri": "~1.0",
-                "sabre/vobject": "~4.0",
-                "sabre/xml": "~1.0"
+                "sabre/uri": "^1.0.1",
+                "sabre/vobject": "^4.1.0",
+                "sabre/xml": "^1.4.0"
             },
             "require-dev": {
                 "evert/phpdoc-md": "~0.1.0",
-                "phpunit/phpunit": "> 4.8, <6.0.0"
+                "monolog/monolog": "^1.18",
+                "phpunit/phpunit": "> 4.8, <6.0.0",
+                "sabre/cs": "^1.0.0"
             },
             "suggest": {
                 "ext-curl": "*",
@@ -84,7 +134,7 @@
                 "framework",
                 "iCalendar"
             ],
-            "time": "2018-10-19T09:57:45+00:00"
+            "time": "2018-10-19T09:58:27+00:00"
         },
         {
             "name": "sabre/event",

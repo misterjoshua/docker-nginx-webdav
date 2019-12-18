@@ -40,7 +40,7 @@ dd if=/dev/urandom of=random32m.dat bs=1024 count=$((32*1024))
 dd if=/dev/urandom of=random60m.dat bs=1024 count=$((60*1024))
 
 MD5SUM_FILE=./md5sum
-md5sum * >$MD5SUM_FILE
+md5sum *.* >$MD5SUM_FILE
 for FILE in *.*; do
     log "SUT should accept a PUT for $SUT/$FILE"
     curl $CURL_OPT -X PUT --data-binary "@$FILE" $SUT/$FILE || die "SUT didn't accept a put for a file"
@@ -50,6 +50,7 @@ for FILE in *.*; do
 done
 
 log "SUT should give us identical files to what we PUT"
+cat $MD5SUM_FILE
 md5sum -c $MD5SUM_FILE
 
 log "SUT should have at least as many files in it than we put up."
