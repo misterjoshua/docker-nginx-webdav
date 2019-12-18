@@ -16,14 +16,13 @@ jobs:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run: |
-        export DOCKER_REPOSITORY=${DOCKER_REPOSITORY:-wheatstalk/docker-php-webdav}
-        export DOCKER_IMAGE=$DOCKER_REPOSITORY:latest
-        
         # Build
+        DOCKER_IMAGE=$DOCKER_REPOSITORY:latest
         ./docker-build.sh
         
         # Push to repository
         VERSION=${GITHUB_REF#refs/tags/v} \
-        DOCKER_SERVER=${DOCKER_SERVER:-}
+        DOCKER_SERVER=${DOCKER_SERVER:-} \
+        DOCKER_REPOSITORY=$DOCKER_REPOSITORY \
         ./docker-push.sh
         
